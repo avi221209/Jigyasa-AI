@@ -115,12 +115,29 @@ export default function StackVisualizer({ traceId = 'factorial-3', predictive = 
 
       {/* Stack frames — rendered bottom-up visually (deepest at bottom) */}
       <div className="px-4 py-4">
+        {predictive && (
+          <div className="flex items-center justify-between mb-2 text-[10px] font-mono text-[#8b90a0] uppercase tracking-wider font-semibold">
+            <span>Actual Call Stack State (Ground Truth)</span>
+            <span>Frame Status</span>
+          </div>
+        )}
         <div className="flex flex-col-reverse gap-1.5">
           {current.frames.map((frame, idx) => {
             const depthIdx = Math.min(current.frames.length - 1 - idx, depthColors.length - 1);
             const colorClass = depthColors[depthIdx];
             const statusClass = statusStyles[frame.status] || '';
             const isTop = idx === 0;
+
+            const formatFrameStatus = (st) => {
+              switch (st) {
+                case 'active': return 'Active';
+                case 'suspended': return 'Suspended';
+                case 'base': return 'Base Case';
+                case 'resolving': return 'Unwinding';
+                case 'complete': return 'Frame Resolved';
+                default: return st;
+              }
+            };
 
             return (
               <div
@@ -147,7 +164,7 @@ export default function StackVisualizer({ traceId = 'factorial-3', predictive = 
                     frame.status === 'resolving' ? 'bg-[#d97b1e] text-white' :
                     'bg-[#d8dae3] text-[#555a6e]'}
                 `}>
-                  {frame.status}
+                  {formatFrameStatus(frame.status)}
                 </span>
               </div>
             );
@@ -192,21 +209,31 @@ export default function StackVisualizer({ traceId = 'factorial-3', predictive = 
             </div>
           </div>
         ) : guessResult ? (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className={`text-xs font-mono font-bold px-2 py-1 rounded ${
-                guessResult === 'correct' ? 'bg-[#dcfce7] text-[#16a34a]' : 'bg-[#fef2f2] text-[#dc4a5e]'
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className={`font-mono font-bold text-[11px] px-2.5 py-1 rounded ${
+                guessResult === 'correct'
+                  ? 'bg-[#dcfce7] text-[#16a34a] border border-[#bbf7d0]'
+                  : 'bg-[#fef2f2] text-[#dc4a5e] border border-[#fecaca]'
               }`}>
-                {guessResult === 'correct' ? '✓ Correct' : '✗ Incorrect'}
+                {guessResult === 'correct' ? '✓ Correct Prediction' : '✗ Incorrect Prediction'}
               </span>
               <span className="text-[11px] text-[#555a6e]">
-                Expected: {current.predict?.type.toUpperCase()} — {current.predict?.expectedValue}
+                {guessResult === 'correct' ? (
+                  <span>
+                    Your prediction matched! Actual step: <strong className="font-mono text-[#1c1f2b]">{current.predict?.type.toUpperCase()}</strong> ({current.predict?.expectedValue})
+                  </span>
+                ) : (
+                  <span>
+                    Your prediction: <strong className="font-mono text-[#dc4a5e] uppercase">{pendingGuess}</strong> · Actual step: <strong className="font-mono text-[#1c1f2b]">{current.predict?.type.toUpperCase()}</strong> ({current.predict?.expectedValue})
+                  </span>
+                )}
               </span>
             </div>
             <button
               onClick={advanceStep}
               disabled={step >= steps.length - 1}
-              className="px-4 py-1.5 rounded-lg bg-[#1c1f2b] text-white text-xs font-medium hover:bg-[#2d3145] disabled:opacity-40 transition-colors cursor-pointer"
+              className="px-4 py-1.5 rounded-lg bg-[#1c1f2b] text-white text-xs font-medium hover:bg-[#2d3145] disabled:opacity-40 transition-colors cursor-pointer ml-auto"
             >
               {step < steps.length - 1 ? 'Next step →' : 'Trace complete'}
             </button>

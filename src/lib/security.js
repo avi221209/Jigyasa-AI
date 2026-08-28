@@ -38,6 +38,90 @@ export function validateStudentInput(input) {
 }
 
 /**
+ * Validate Ask Mode question input against strict schema
+ * @param {any} input
+ * @returns {{ valid: boolean, sanitized?: string, error?: string }}
+ */
+export function validateAskModeQuestion(input) {
+  if (typeof input !== 'string') {
+    return { valid: false, error: 'Invalid payload: Question must be a string.' };
+  }
+
+  const trimmed = input.trim();
+
+  if (trimmed.length < 10) {
+    return { valid: false, error: 'Question too short. Please provide at least 10 characters.' };
+  }
+
+  if (trimmed.length > 1000) {
+    return { valid: false, error: 'Question exceeds maximum limit of 1000 characters.' };
+  }
+
+  // eslint-disable-next-line no-control-regex
+  if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(trimmed)) {
+    return { valid: false, error: 'Invalid control characters detected in question.' };
+  }
+
+  return { valid: true, sanitized: trimmed };
+}
+
+/**
+ * Validate Follow-Up challenge answer against strict schema
+ * @param {any} input
+ * @returns {{ valid: boolean, sanitized?: string, error?: string }}
+ */
+export function validateFollowUpAnswer(input) {
+  if (typeof input !== 'string') {
+    return { valid: false, error: 'Invalid payload: Answer must be a string.' };
+  }
+
+  const trimmed = input.trim();
+
+  if (trimmed.length < 5) {
+    return { valid: false, error: 'Answer too short. Please provide at least 5 characters.' };
+  }
+
+  if (trimmed.length > 1000) {
+    return { valid: false, error: 'Answer exceeds maximum limit of 1000 characters.' };
+  }
+
+  // eslint-disable-next-line no-control-regex
+  if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(trimmed)) {
+    return { valid: false, error: 'Invalid control characters detected.' };
+  }
+
+  return { valid: true, sanitized: trimmed };
+}
+
+/**
+ * Validate Explain It Back student explanation against strict schema
+ * @param {any} input
+ * @returns {{ valid: boolean, sanitized?: string, error?: string }}
+ */
+export function validateExplainBackInput(input) {
+  if (typeof input !== 'string') {
+    return { valid: false, error: 'Invalid payload: Explanation must be a string.' };
+  }
+
+  const trimmed = input.trim();
+
+  if (trimmed.length < 10) {
+    return { valid: false, error: 'Explanation too short. Please provide at least 10 characters.' };
+  }
+
+  if (trimmed.length > 1500) {
+    return { valid: false, error: 'Explanation exceeds maximum limit of 1500 characters.' };
+  }
+
+  // eslint-disable-next-line no-control-regex
+  if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(trimmed)) {
+    return { valid: false, error: 'Invalid control characters detected.' };
+  }
+
+  return { valid: true, sanitized: trimmed };
+}
+
+/**
  * Validate self-rated confidence level against strict enum schema
  * @param {any} level
  * @returns {boolean}
@@ -91,7 +175,7 @@ export function validateFileUpload(file, allowedMimeTypes = ['image/png', 'image
 
   // Verify extension is not executable
   const extension = (file.name.split('.').pop() || '').toLowerCase();
-  const dangerousExtensions = new Set(['exe', 'js', 'html', 'php', 'py', 'sh', 'bat', 'cmd', 'ps1', 'vbs', 'dll']);
+  const dangerousExtensions = new Set(['exe', 'js', 'html', 'php', 'py', 'sh', 'bat', 'cmd', 'ps1', 'vbs', 'dll', 'cgi', 'pl']);
   if (dangerousExtensions.has(extension)) {
     return { valid: false, error: 'Executable or script files are strictly prohibited.' };
   }
@@ -102,3 +186,4 @@ export function validateFileUpload(file, allowedMimeTypes = ['image/png', 'image
 
   return { valid: true };
 }
+

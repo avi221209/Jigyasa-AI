@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { validateAskModeQuestion, validateStudentInput } from '../../lib/security';
 
 /**
  * AskInputForm — Step 1 of Ask Mode
@@ -23,15 +24,17 @@ export default function AskInputForm({
     e.preventDefault();
     let hasError = false;
 
-    if (!question.trim()) {
-      setQuestionError('Please enter your question, concept, or code snippet.');
+    const qVal = validateAskModeQuestion(question);
+    if (!qVal.valid) {
+      setQuestionError(qVal.error);
       hasError = true;
     } else {
       setQuestionError('');
     }
 
-    if (!reasoning.trim()) {
-      setReasoningError('Please explain your reasoning (what you think is happening).');
+    const rVal = validateStudentInput(reasoning);
+    if (!rVal.valid) {
+      setReasoningError(rVal.error);
       hasError = true;
     } else {
       setReasoningError('');
@@ -40,8 +43,8 @@ export default function AskInputForm({
     if (hasError) return;
 
     onSubmit({
-      question: question.trim(),
-      reasoning: reasoning.trim(),
+      question: qVal.sanitized,
+      reasoning: rVal.sanitized,
       confidence
     });
   };

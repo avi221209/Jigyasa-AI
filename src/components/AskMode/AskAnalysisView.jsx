@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ASK_MODE_CATEGORIES } from '../../data/subjects/askModePrompts';
+import ExplainBackChallenge from '../ExplainBackChallenge';
 
 /**
  * AskAnalysisView — Step 2 of Ask Mode
@@ -149,6 +150,14 @@ export default function AskAnalysisView({
             {analysisResult.targetedRemediation}
           </p>
         </div>
+      )}
+
+      {/* Feynman Technique — Explain It Back Challenge */}
+      {catKey !== 'off-topic' && analysisResult.targetedRemediation && (
+        <ExplainBackChallenge
+          conceptLabel={catLabel}
+          targetedRemediation={analysisResult.targetedRemediation}
+        />
       )}
 
       {/* SECTION E — Confidence Calibration */}

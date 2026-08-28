@@ -26,6 +26,21 @@ export default function App() {
   // Mode selection: 'select' | 'practice' | 'ask'
   const [appMode, setAppMode] = useState('select');
 
+  // Theme & Accessibility State
+  const [theme, setTheme] = useState(() => localStorage.getItem('jigyasa_theme') || 'light');
+  const [fontSize, setFontSize] = useState(() => localStorage.getItem('jigyasa_font_size') || 'md');
+
+  const toggleTheme = () => {
+    const next = theme === 'light' ? 'dark' : 'light';
+    setTheme(next);
+    localStorage.setItem('jigyasa_theme', next);
+  };
+
+  const changeFontSize = (size) => {
+    setFontSize(size);
+    localStorage.setItem('jigyasa_font_size', size);
+  };
+
   // Practice Mode state
   const [round, setRound] = useState(1);
   const [currentProblem, setCurrentProblem] = useState(initialProblem);
@@ -146,55 +161,114 @@ export default function App() {
     setFallbackReason('');
   };
 
+  const fontScaleStyle = {
+    fontSize: fontSize === 'sm' ? '14px' : fontSize === 'lg' ? '18px' : '16px'
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className={`min-h-screen flex flex-col transition-colors duration-200 ${
+        theme === 'dark' ? 'dark bg-[#0b0f19] text-[#f1f5f9]' : 'bg-[#f6f7f9] text-[#1c1f2b]'
+      }`}
+      style={fontScaleStyle}
+    >
       {/* Header */}
-      <header className="border-b border-[#e8e9ef] bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-[#e8e9ef] dark:border-[#2a3449] bg-white/80 dark:bg-[#151c2c]/80 backdrop-blur-sm sticky top-0 z-50 transition-colors">
         <div className="max-w-3xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3">
             <button
               onClick={handleSelectHome}
-              className="font-display font-bold text-base text-[#1c1f2b] hover:opacity-80 transition-opacity flex items-center gap-2 cursor-pointer"
+              className="font-display font-bold text-base text-[#1c1f2b] dark:text-[#f1f5f9] hover:opacity-80 transition-opacity flex items-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#3b5bdb]"
             >
               Jigyasa AI
-              <span className="font-mono text-[10px] font-medium px-2 py-0.5 rounded bg-[#eef1fa] text-[#3b5bdb] border border-[#d6dcf5]">
+              <span className="font-mono text-[10px] font-medium px-2 py-0.5 rounded bg-[#eef1fa] dark:bg-[#2a3449] text-[#3b5bdb] dark:text-[#60a5fa] border border-[#d6dcf5] dark:border-[#3b5bdb]/40">
                 {subjectMeta.name}
               </span>
             </button>
           </div>
 
-          {/* Mode Selector Navigation Pills */}
-          <div className="flex items-center gap-1.5 bg-[#f0f1f5] p-1 rounded-lg border border-[#e8e9ef]">
-            <button
-              onClick={handleSelectHome}
-              className={`px-2.5 py-1 rounded-md font-mono text-[11px] font-medium transition-all cursor-pointer ${
-                appMode === 'select'
-                  ? 'bg-white text-[#1c1f2b] shadow-sm font-semibold'
-                  : 'text-[#555a6e] hover:text-[#1c1f2b]'
-              }`}
-            >
-              Home
-            </button>
-            <button
-              onClick={handleSelectPracticeMode}
-              className={`px-2.5 py-1 rounded-md font-mono text-[11px] font-medium transition-all cursor-pointer ${
-                appMode === 'practice'
-                  ? 'bg-[#3b5bdb] text-white shadow-sm font-semibold'
-                  : 'text-[#555a6e] hover:text-[#1c1f2b]'
-              }`}
-            >
-              Practice Mode
-            </button>
-            <button
-              onClick={handleSelectAskMode}
-              className={`px-2.5 py-1 rounded-md font-mono text-[11px] font-medium transition-all cursor-pointer ${
-                appMode === 'ask'
-                  ? 'bg-[#8b5cf6] text-white shadow-sm font-semibold'
-                  : 'text-[#555a6e] hover:text-[#1c1f2b]'
-              }`}
-            >
-              Ask Mode
-            </button>
+          <div className="flex items-center gap-2">
+            {/* Mode Selector Navigation Pills */}
+            <div className="flex items-center gap-1.5 bg-[#f0f1f5] dark:bg-[#0b0f19] p-1 rounded-lg border border-[#e8e9ef] dark:border-[#2a3449]">
+              <button
+                onClick={handleSelectHome}
+                className={`px-2.5 py-1 rounded-md font-mono text-[11px] font-medium transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#3b5bdb] ${
+                  appMode === 'select'
+                    ? 'bg-white dark:bg-[#2a3449] text-[#1c1f2b] dark:text-[#f1f5f9] shadow-sm font-semibold'
+                    : 'text-[#555a6e] dark:text-[#94a3b8] hover:text-[#1c1f2b]'
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={handleSelectPracticeMode}
+                className={`px-2.5 py-1 rounded-md font-mono text-[11px] font-medium transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#3b5bdb] ${
+                  appMode === 'practice'
+                    ? 'bg-[#3b5bdb] text-white shadow-sm font-semibold'
+                    : 'text-[#555a6e] dark:text-[#94a3b8] hover:text-[#1c1f2b]'
+                }`}
+              >
+                Practice Mode
+              </button>
+              <button
+                onClick={handleSelectAskMode}
+                className={`px-2.5 py-1 rounded-md font-mono text-[11px] font-medium transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#3b5bdb] ${
+                  appMode === 'ask'
+                    ? 'bg-[#8b5cf6] text-white shadow-sm font-semibold'
+                    : 'text-[#555a6e] dark:text-[#94a3b8] hover:text-[#1c1f2b]'
+                }`}
+              >
+                Ask Mode
+              </button>
+            </div>
+
+            {/* Theme & Accessibility Controls */}
+            <div className="flex items-center gap-1">
+              {/* Font Size Controls */}
+              <div className="flex items-center bg-[#f0f1f5] dark:bg-[#0b0f19] p-0.5 rounded-lg border border-[#e8e9ef] dark:border-[#2a3449] font-mono text-[10px]">
+                <button
+                  onClick={() => changeFontSize('sm')}
+                  aria-label="Small Font Size"
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#3b5bdb] ${
+                    fontSize === 'sm'
+                      ? 'bg-white dark:bg-[#2a3449] font-bold shadow-xs text-[#1c1f2b] dark:text-[#f1f5f9]'
+                      : 'text-[#8b90a0] dark:text-[#64748b] hover:text-[#1c1f2b]'
+                  }`}
+                >
+                  A-
+                </button>
+                <button
+                  onClick={() => changeFontSize('md')}
+                  aria-label="Medium Font Size"
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#3b5bdb] ${
+                    fontSize === 'md'
+                      ? 'bg-white dark:bg-[#2a3449] font-bold shadow-xs text-[#1c1f2b] dark:text-[#f1f5f9]'
+                      : 'text-[#8b90a0] dark:text-[#64748b] hover:text-[#1c1f2b]'
+                  }`}
+                >
+                  A
+                </button>
+                <button
+                  onClick={() => changeFontSize('lg')}
+                  aria-label="Large Font Size"
+                  className={`px-1.5 py-0.5 rounded transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#3b5bdb] ${
+                    fontSize === 'lg'
+                      ? 'bg-white dark:bg-[#2a3449] font-bold shadow-xs text-[#1c1f2b] dark:text-[#f1f5f9]'
+                      : 'text-[#8b90a0] dark:text-[#64748b] hover:text-[#1c1f2b]'
+                  }`}
+                >
+                  A+
+                </button>
+              </div>
+
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleTheme}
+                aria-label="Toggle Dark Mode"
+                className="p-1.5 rounded-lg bg-[#f0f1f5] dark:bg-[#0b0f19] border border-[#e8e9ef] dark:border-[#2a3449] text-xs transition-colors hover:opacity-80 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#3b5bdb]"
+              >
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+            </div>
           </div>
         </div>
       </header>

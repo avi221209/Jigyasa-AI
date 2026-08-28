@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import StackVisualizer from './StackVisualizer';
+import ExplainBackChallenge from './ExplainBackChallenge';
 import { categories } from '../data/subjects/recursion';
 
 /**
@@ -111,6 +112,12 @@ export default function FeedbackCard({ round, totalRounds, problem, analysisResu
           </div>
         )}
       </div>
+
+      {/* Feynman Technique — Explain It Back Challenge */}
+      <ExplainBackChallenge
+        conceptLabel={cat.label}
+        targetedRemediation={analysisResult.targetedRemediation}
+      />
 
       {/* Stack Visualizer — signature element, always shown */}
       <div>

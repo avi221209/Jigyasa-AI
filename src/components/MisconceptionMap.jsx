@@ -4,6 +4,7 @@ import {
   RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
 } from 'recharts';
 import { categories } from '../data/subjects/recursion';
+import PrerequisiteMap from './PrerequisiteMap';
 
 /**
  * MisconceptionMap — End-of-session diagnostic profile.
@@ -129,11 +130,11 @@ export default function MisconceptionMap({ history, onRestart }) {
 
     lines.push(`- Resolved Misconceptions: ${resolvedList.length > 0 ? resolvedList.join(', ') : 'None'}`);
     lines.push(`- Persistent Misconceptions: ${persistentList.length > 0 ? persistentList.join(', ') : 'None'}`);
-    lines.push(`- New Misconceptions in Round 3: ${newList.length > 0 ? newList.join(', ') : 'None'}`);
+    lines.push(`- New in Final Round: ${newList.length > 0 ? newList.join(', ') : 'None'}`);
 
     if (totalPreds > 0) {
       lines.push('');
-      lines.push(`PREDICTIVE STACK TRACING: ${correctPreds}/${totalPreds} push/pop operations predicted correctly`);
+      lines.push(`STACK PREDICTION ACCURACY: ${correctPreds}/${totalPreds} (${Math.round((correctPreds / totalPreds) * 100)}%)`);
     }
 
     lines.push('================================================');
@@ -141,22 +142,22 @@ export default function MisconceptionMap({ history, onRestart }) {
     try {
       await navigator.clipboard.writeText(lines.join('\n'));
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => setCopied(false), 2500);
     } catch (err) {
-      console.error('Failed to copy summary to clipboard:', err);
+      console.warn('Failed to copy to clipboard:', err);
     }
   };
 
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-[#d8dae3] shadow-sm px-5 py-4">
+      <div className="bg-white dark:bg-[#151c2c] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] shadow-sm px-5 py-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="font-display font-bold text-lg text-[#1c1f2b]">
+            <h2 className="font-display font-bold text-lg text-[#1c1f2b] dark:text-[#f1f5f9]">
               Misconception Map
             </h2>
-            <p className="text-xs text-[#8b90a0] mt-0.5">
+            <p className="text-xs text-[#8b90a0] dark:text-[#94a3b8] mt-0.5">
               3-round diagnostic profile — the kind of self-assessment that separates exam prep from actual understanding.
             </p>
           </div>
@@ -172,6 +173,9 @@ export default function MisconceptionMap({ history, onRestart }) {
           </span>
         </div>
       </div>
+
+      {/* Prerequisite Hierarchy Diagram */}
+      <PrerequisiteMap history={history} />
 
       {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
