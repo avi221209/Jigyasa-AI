@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+/*
+ * Design system — Misconception Mapper
+ * =====================================
+ * Palette grounded in the subject: call stacks, LIFO, memory depth.
+ *
+ * Base:    #f6f7f9 (cool paper) / #1c1f2b (deep memory)
+ * Surface: #ffffff (card)       / #252838 (elevated)
+ * Accent:  #3b5bdb (cobalt — instruction pointer)
+ * Stack:   Depth gradient from light to dark as frames accumulate
+ * Status:  #16a34a (resolved), #dc4a5e (error), #d97b1e (warn)
+ *
+ * Typefaces:
+ *   Display — Space Grotesk (geometric, techy, characterful)
+ *   Body    — Inter (clean, high-legibility, quiet)
+ *   Code    — JetBrains Mono (ligatures, monospaced)
+ */
+
+@theme {
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Surface palette */
+  --color-page: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-surface-raised: #f0f1f5;
+  --color-surface-sunken: #ecedf2;
+  --color-border: #d8dae3;
+  --color-border-subtle: #e8e9ef;
+
+  /* Text palette */
+  --color-ink: #1c1f2b;
+  --color-ink-secondary: #555a6e;
+  --color-ink-muted: #8b90a0;
+
+  /* Accent — cobalt (the "instruction pointer") */
+  --color-accent: #3b5bdb;
+  --color-accent-hover: #2f4ec4;
+  --color-accent-subtle: #e8ecfc;
+  --color-accent-text: #2a44a8;
+
+  /* Stack depth gradient stops */
+  --color-stack-0: #eef1fa;
+  --color-stack-1: #d6dcf5;
+  --color-stack-2: #b8c4ef;
+  --color-stack-3: #8fa0e5;
+  --color-stack-active: #3b5bdb;
+
+  /* Status */
+  --color-correct: #16a34a;
+  --color-error: #dc4a5e;
+  --color-warn: #d97b1e;
+  --color-info: #3b82f6;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-page);
+    color: var(--color-ink);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: white;
+  }
+}
