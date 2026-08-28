@@ -318,9 +318,9 @@ Respond with ONLY this JSON (no markdown fences):
 export function heuristicClassify(text) {
   const t = text.toLowerCase();
 
-  const mentionsLoop = /\bloop\b|for\s*\(|while\b|iterat|counter\b|in-place|repeats/i.test(t);
-  const mentionsBase = /base\s*case|stop|terminat|if\s*\(|n\s*[<=>]=?\s*[01]/i.test(t);
-  const mentionsStack = /stack|unwind|frame|wait|return|memory|pop|push|suspend|frozen|lifo/i.test(t);
+  const mentionsLoop = /\b(loop|for|while|iterat\w*|counter|in-place|repeats)\b/i.test(t);
+  const mentionsBase = /\b(base\s*case|stop|terminat\w*|if)\b|n\s*[<=>]=?\s*[01]/i.test(t);
+  const mentionsStack = /\b(stack|unwind|frame|wait|return|returns|memory|pop|push|suspend|frozen|lifo)\b/i.test(t);
   const isShort = t.trim().length < 40;
 
   if (isShort && !mentionsStack && !mentionsBase) {

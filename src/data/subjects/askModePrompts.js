@@ -14,6 +14,7 @@ export const ASK_MODE_CATEGORIES = {
   'scope-confusion': { label: 'Scope & Frame Isolation Error', color: '#06b6d4' },
   'return-value-confusion': { label: 'Return Value Propagation Gap', color: '#3b82f6' },
   'off-by-one': { label: 'Boundary / Off-by-One Error', color: '#f59e0b' },
+  'off-topic': { label: 'Off-Topic Question', color: '#64748b' },
   'other': { label: 'Conceptual Misconception', color: '#64748b' }
 };
 
@@ -32,13 +33,13 @@ Student's self-confidence: "${confidenceLevel}"
 
 Analyze the student's reasoning and respond with this exact JSON structure:
 {
-  "misconceptionCategory": "no-base-case" | "iteration-confusion" | "stack-blindness" | "correct-reasoning" | "guessing" | "scope-confusion" | "return-value-confusion" | "off-by-one" | "other",
+  "misconceptionCategory": "no-base-case" | "iteration-confusion" | "stack-blindness" | "correct-reasoning" | "guessing" | "scope-confusion" | "return-value-confusion" | "off-by-one" | "off-topic" | "other",
   "categoryLabel": "human-readable label for the category",
   "whatStudentGotRight": "string — specific things in their reasoning that are correct (be precise, quote their words if relevant)",
   "exactGap": "string — the precise conceptual error or missing link in their reasoning, explained in CS terminology",
   "targetedRemediation": "string — a focused 3-5 sentence explanation that directly addresses the exact gap, using correct CS terminology (LIFO, stack frame, call graph, space complexity etc as relevant)",
   "followUpQuestion": "string — one targeted follow-up question designed to probe whether the student truly fixed the identified gap",
-  "confidenceAssessment": "overconfident" | "calibrated" | "underconfident",
+  "confidenceAssessment": "overconfident" | "calibrated" | "underconfident" | "n/a",
   "confidenceNote": "string — one sentence explaining why their confidence matched or mismatched their actual reasoning quality",
   "conceptTags": ["recursion", "call stack", "base case", "LIFO"]
 }`;
@@ -69,6 +70,23 @@ export function runAskModeFallback(userQuestion, userReasoning, confidenceLevel 
   const r = (userReasoning || '').toLowerCase();
   const combined = `${q} ${r}`;
 
+  // Off-topic detection step: check if input contains any recursion/DSA-relevant terms
+  const isRecursionRelated = /\b(recursion|recursive|recursively|recursing|stack|base\s*case|basecase|call\s*stack|calls?\s*itself|factorial|fibonacci|unwind|unwinding|lifo|overflow|depth|trace|tracing|loop|for|while|counter|return|returns|undefined|null|stop)\b/i.test(combined);
+
+  if (!isRecursionRelated) {
+    return {
+      misconceptionCategory: 'off-topic',
+      categoryLabel: 'Off-Topic Question',
+      whatStudentGotRight: '',
+      exactGap: '',
+      targetedRemediation: 'Jigyasa AI is focused specifically on recursion and call-stack mechanics. Try asking about a recursive function, base cases, or how the call stack works — for example: "why does my recursive function never stop?"',
+      followUpQuestion: null,
+      confidenceAssessment: 'n/a',
+      confidenceNote: '',
+      conceptTags: []
+    };
+  }
+
   let category = 'other';
   let categoryLabel = 'Conceptual Misconception';
   let whatStudentGotRight = 'You attempted to trace the problem systematically step by step.';
@@ -77,7 +95,12 @@ export function runAskModeFallback(userQuestion, userReasoning, confidenceLevel 
   let followUpQuestion = 'If you call a recursive function with depth N, how many frames sit on the stack when the base case is reached?';
   let conceptTags = ['recursion', 'call stack', 'memory frames'];
 
-  if (combined.includes('loop') || combined.includes('for') || combined.includes('while') || combined.includes('counter')) {
+  // Word-boundary-safe keyword matching
+  const hasLoop = /\b(loop|for|while|counter)\b/i.test(combined);
+  const hasReturnGap = /\b(undefined|return|returns|null)\b/i.test(combined);
+  const hasBase = /\b(base|if|stop)\b/i.test(combined);
+
+  if (hasLoop) {
     category = 'iteration-confusion';
     categoryLabel = 'Loop Mental Model';
     whatStudentGotRight = 'You correctly identified the sequential progression of steps.';
@@ -85,7 +108,7 @@ export function runAskModeFallback(userQuestion, userReasoning, confidenceLevel 
     targetedRemediation = 'Unlike a for-loop that reuses a single mutable counter, each recursive call allocates an entirely separate stack frame in memory. Parameters are isolated per frame rather than updated in place.';
     followUpQuestion = 'Why does each recursive call create a new set of local variables instead of overwriting existing ones?';
     conceptTags = ['recursion', 'call stack', 'stack frames', 'variables'];
-  } else if (combined.includes('undefined') || combined.includes('return') || combined.includes('null')) {
+  } else if (hasReturnGap) {
     category = 'return-value-confusion';
     categoryLabel = 'Return Value Propagation Gap';
     whatStudentGotRight = 'You noticed that the function returns an unexpected result at runtime.';
@@ -93,7 +116,7 @@ export function runAskModeFallback(userQuestion, userReasoning, confidenceLevel 
     targetedRemediation = 'When a recursive call finishes, its return value must be explicitly passed back to the parent frame via `return func(...)`. Omitting `return` causes the parent call to receive `undefined`.';
     followUpQuestion = 'What happens to the return value of a recursive call if the parent frame forgets to include `return`?';
     conceptTags = ['return values', 'call stack', 'recursion'];
-  } else if (!combined.includes('base') && !combined.includes('if') && !combined.includes('stop')) {
+  } else if (!hasBase) {
     category = 'no-base-case';
     categoryLabel = 'Missing Base Case';
     whatStudentGotRight = 'You recognized the recursive function calls.';

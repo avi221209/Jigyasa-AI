@@ -40,6 +40,21 @@ export default function AskModeFlow({ onSwitchToPracticeMode, onUpdateFallbackIn
     }
 
     const categoryKey = parsed.misconceptionCategory || parsed.category || parsed.categoryKey || 'other';
+
+    if (categoryKey === 'off-topic') {
+      return {
+        misconceptionCategory: 'off-topic',
+        categoryLabel: parsed.categoryLabel || 'Off-Topic Question',
+        whatStudentGotRight: '',
+        exactGap: '',
+        targetedRemediation: parsed.targetedRemediation || 'Jigyasa AI is focused specifically on recursion and call-stack mechanics. Try asking about a recursive function, base cases, or how the call stack works — for example: "why does my recursive function never stop?"',
+        followUpQuestion: null,
+        confidenceAssessment: 'n/a',
+        confidenceNote: '',
+        conceptTags: []
+      };
+    }
+
     const catMeta = ASK_MODE_CATEGORIES[categoryKey] || ASK_MODE_CATEGORIES['other'];
 
     return {

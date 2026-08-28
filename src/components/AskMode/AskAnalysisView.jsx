@@ -152,17 +152,19 @@ export default function AskAnalysisView({
       )}
 
       {/* SECTION E — Confidence Calibration */}
-      <div
-        className="rounded-xl border p-4 text-xs"
-        style={{ backgroundColor: calStyle.bg, borderColor: calStyle.border, color: calStyle.text }}
-      >
-        <span className="font-display font-semibold uppercase tracking-wider block text-xs mb-1">
-          Confidence Calibration: {calStyle.label}
-        </span>
-        <p className="text-[12px] opacity-90 leading-relaxed" style={{ color: '#1c1f2b' }}>
-          {analysisResult.confidenceNote || `Your self-rated confidence was ${calStyle.label.toLowerCase()}.`}
-        </p>
-      </div>
+      {analysisResult.confidenceAssessment && analysisResult.confidenceAssessment !== 'n/a' && catKey !== 'off-topic' && (
+        <div
+          className="rounded-xl border p-4 text-xs"
+          style={{ backgroundColor: calStyle.bg, borderColor: calStyle.border, color: calStyle.text }}
+        >
+          <span className="font-display font-semibold uppercase tracking-wider block text-xs mb-1">
+            Confidence Calibration: {calStyle.label}
+          </span>
+          <p className="text-[12px] opacity-90 leading-relaxed" style={{ color: '#1c1f2b' }}>
+            {analysisResult.confidenceNote || `Your self-rated confidence was ${calStyle.label.toLowerCase()}.`}
+          </p>
+        </div>
+      )}
 
       {/* SECTION F — Follow-Up Challenge */}
       {analysisResult.followUpQuestion && (
