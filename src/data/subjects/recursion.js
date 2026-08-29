@@ -119,6 +119,24 @@ sumArray([5, 2]);`,
       question: 'Explain why the expression `5 + sumArray([2])` cannot evaluate immediately. What concrete value is the parent frame blocked on, and what happens in memory while it waits? Interviewers use this pattern to verify you understand that recursive calls are not sequential statements — they are nested pending evaluations.',
       expectedTopic: 'Parent frame holds `5 + <pending>`. Child must resolve sumArray([2]) → sumArray([]) → 0, then unwind: 0→2→7.',
       stackTraceId: 'sum-array'
+    },
+    {
+      id: 'mutual-even-odd',
+      title: 'Mutual Recursion: isEven(3) & isOdd(n)',
+      code: `function isEven(n) {
+  if (n === 0) return true;
+  return isOdd(n - 1);
+}
+
+function isOdd(n) {
+  if (n === 0) return false;
+  return isEven(n - 1);
+}
+
+isEven(3);`,
+      question: 'Trace the alternating call stack frames when isEven(3) is called. How do multiple distinct functions calling each other alter the stack composition compared to single-function recursion? What sequence of frames sits on the stack when the base case is reached at n=0?',
+      expectedTopic: 'Stack alternates function frames: isEven(3) → isOdd(2) → isEven(1) → isOdd(0). Base case in isOdd(0) returns false, unwinding back through alternating frames.',
+      stackTraceId: 'factorial-3'
     }
   ],
   'no-base-case': [
@@ -175,6 +193,19 @@ count(2);`,
       question: 'Write the exact console output. Then explain why "After: 1" prints before "After: 2" even though there is no reverse loop. This LIFO execution order is identical to the pattern used in recursive DFS — understanding it here means understanding post-order traversal later.',
       expectedTopic: 'Output: Before:2, Before:1, After:1, After:2. The "After" lines execute during stack unwinding (LIFO).',
       stackTraceId: 'count-lifo'
+    },
+    {
+      id: 'tail-sum-opt',
+      title: 'Tail Call Optimization: sumTail(3, 0)',
+      code: `function sumTail(n, acc = 0) {
+  if (n <= 0) return acc;
+  return sumTail(n - 1, acc + n);
+}
+
+sumTail(3, 0);`,
+      question: 'Is the parent frame sumTail(3, 0) required to remain suspended on the call stack while waiting for sumTail(2, 3) to evaluate? Contrast this with non-tail recursion (n + sum(n-1)) where addition occurs after child return. Explain how tail call optimization (TCO) reuses stack frames, and why students often confuse TCO with an iterative loop.',
+      expectedTopic: 'In tail recursion, the recursive call is the final operation. No pending work remains in parent frames, enabling TCO to reuse a single stack frame (O(1) space), whereas non-tail recursion requires O(n) frames.',
+      stackTraceId: 'factorial-3'
     }
   ],
   'correct-reasoning': [
@@ -190,6 +221,21 @@ count(2);`,
       question: 'This function makes TWO recursive calls per frame. Trace a 3-node tree (root with left and right children). How does the call stack differ from linear recursion? What is the maximum stack depth vs total number of calls? This distinction between stack depth (space) and total calls (time) is critical for complexity analysis.',
       expectedTopic: 'Max depth = O(h) where h = tree height. Total calls = O(n) where n = nodes. Stack holds at most h+1 frames simultaneously.',
       stackTraceId: 'tree-depth'
+    },
+    {
+      id: 'memo-fib-cache',
+      title: 'Memoized Recursion: fibMemo(4)',
+      code: `function fibMemo(n, memo = {}) {
+  if (n in memo) return memo[n];
+  if (n <= 1) return n;
+  memo[n] = fibMemo(n - 1, memo) + fibMemo(n - 2, memo);
+  return memo[n];
+}
+
+fibMemo(4);`,
+      question: 'When computing fibMemo(4), fibMemo(3) executes first and populates memo[2]. When the right branch of fibMemo(4) calls fibMemo(2), does it spawn new recursive sub-frames or return immediately? Explain how memoization prunes call tree branches and alters space/time complexity.',
+      expectedTopic: 'memo[2] cache hit returns in O(1) without creating sub-frames for fibMemo(1)/fibMemo(0). Prunes call tree from O(2^n) time down to O(n) time with O(n) stack depth.',
+      stackTraceId: 'factorial-3'
     }
   ],
   'guessing': [

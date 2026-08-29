@@ -14,7 +14,7 @@ import { validateStudentInput } from '../lib/security';
  *   isLoading           — boolean
  *   subjectMeta         — { name, examContext }
  */
-export default function QuestionCard({ round, totalRounds, problem, onSubmitAnswer, isLoading, subjectMeta }) {
+export default function QuestionCard({ round, totalRounds, problem, onSubmitAnswer, onSkipProblem, isLoading, subjectMeta }) {
   const [answer, setAnswer] = useState('');
   const [confidence, setConfidence] = useState(null); // 'low' | 'medium' | 'high'
   const [phase, setPhase] = useState('answer'); // 'answer' | 'confidence'
@@ -104,7 +104,17 @@ export default function QuestionCard({ round, totalRounds, problem, onSubmitAnsw
             />
             {error && <p className="mt-1 text-xs text-[#dc4a5e]">{error}</p>}
 
-            <div className="flex justify-end mt-3">
+            <div className="flex items-center justify-between mt-3">
+              {onSkipProblem ? (
+                <button
+                  type="button"
+                  onClick={onSkipProblem}
+                  disabled={isLoading}
+                  className="px-3 py-1.5 rounded-lg border border-[#d8dae3] dark:border-[#2a3449] text-[#555a6e] dark:text-[#94a3b8] hover:bg-[#f0f1f5] dark:hover:bg-[#2a3449] text-xs font-mono transition-colors cursor-pointer disabled:opacity-40"
+                >
+                  Skip this problem →
+                </button>
+              ) : <div></div>}
               <button
                 type="submit"
                 disabled={isLoading || !answer.trim()}

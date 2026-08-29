@@ -148,6 +148,42 @@ export default function App() {
     setCurrentConfidence(null);
   };
 
+  const handleSkipProblem = () => {
+    const skipEntry = {
+      round,
+      problem: currentProblem,
+      studentAnswer: '[Skipped]',
+      confidence: null,
+      analysis: {
+        category: 'skipped',
+        confidence: 0,
+        explanation: 'This problem was skipped by the student during the diagnostic input stage.',
+        targetedRemediation: 'No misconception classified for skipped rounds.',
+        nextFocusArea: 'Skipped'
+      },
+      isSkipped: true,
+      stackPredictions: null
+    };
+
+    const newHistory = [...history, skipEntry];
+    setHistory(newHistory);
+
+    if (round >= TOTAL_ROUNDS) {
+      setIsCompleted(true);
+      return;
+    }
+
+    const defaultBank = problemBank['stack-blindness'];
+    const nextIdx = (round - 1) % defaultBank.length;
+    const nextProblem = defaultBank[nextIdx] || defaultBank[0];
+
+    setRound(r => r + 1);
+    setCurrentProblem(nextProblem);
+    setAnalysisResult(null);
+    setCurrentAnswer('');
+    setCurrentConfidence(null);
+  };
+
   const handleRestartPracticeMode = () => {
     resetRateLimiter();
     setRound(1);
@@ -303,6 +339,7 @@ export default function App() {
                 totalRounds={TOTAL_ROUNDS}
                 problem={currentProblem}
                 onSubmitAnswer={handleAnswerSubmit}
+                onSkipProblem={handleSkipProblem}
                 isLoading={isLoading}
                 subjectMeta={subjectMeta}
               />

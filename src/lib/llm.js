@@ -144,42 +144,59 @@ async function callNvidia(prompt, systemInstruction, apiKey, modelName) {
  * Call Google Gemini API
  */
 async function callGemini(prompt, systemInstruction, apiKey) {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${apiKey}`;
+  const models = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+  let lastError = null;
 
-  const body = {
-    contents: [
-      {
-        role: 'user',
-        parts: [{ text: prompt }]
+  for (const model of models) {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    const body = {
+      contents: [
+        {
+          role: 'user',
+          parts: [{ text: prompt }]
+        }
+      ],
+      generationConfig: {
+        temperature: 0.2
       }
-    ],
-    generationConfig: {
-      temperature: 0.2
-    }
-  };
-
-  if (systemInstruction) {
-    body.systemInstruction = {
-      parts: [{ text: systemInstruction }]
     };
+
+    if (systemInstruction) {
+      body.systemInstruction = {
+        parts: [{ text: systemInstruction }]
+      };
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (!response.ok) {
+        const errBody = await response.text();
+        // If rate limited or model error, try next model candidate before failing
+        lastError = new Error(`Gemini API (${model}) returned status ${response.status}: ${errBody}`);
+        if (response.status === 429 || response.status === 404) {
+          console.warn(`[callGemini] Model ${model} returned ${response.status}. Attempting fallback model...`);
+          continue;
+        }
+        throw lastError;
+      }
+
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      return { text: text, isFallback: false, provider: 'gemini' };
+    } catch (err) {
+      lastError = err;
+    }
   }
 
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-
-  if (!response.ok) {
-    const errBody = await response.text();
-    throw new Error(`Gemini API returned status ${response.status}: ${errBody}`);
-  }
-
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-  return { text: text, isFallback: false, provider: 'gemini' };
+  throw lastError || new Error('Gemini API call failed across all candidate models.');
 }
 
 /**

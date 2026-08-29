@@ -300,11 +300,15 @@ export default function MisconceptionMap({ history, onRestart }) {
         </h3>
         <div className="space-y-3">
           {history.map((h, idx) => {
-            const cat = categories[h.analysis.category] || {};
+            const isSkipped = h.isSkipped || h.analysis?.category === 'skipped';
+            const cat = isSkipped
+              ? { label: 'Skipped', color: '#64748b' }
+              : categories[h.analysis?.category] || { label: h.analysis?.category, color: '#8b90a0' };
+
             return (
-              <div key={idx} className="flex gap-3 items-start p-3 rounded-lg border border-[#e8e9ef] bg-[#f6f7f9]">
+              <div key={idx} className="flex gap-3 items-start p-3 rounded-lg border border-[#e8e9ef] dark:border-[#2a3449] bg-[#f6f7f9] dark:bg-[#0b0f19]">
                 <div className="shrink-0">
-                  <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#1c1f2b] text-white">
+                  <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#1c1f2b] dark:bg-[#2a3449] text-white">
                     R{h.round}
                   </span>
                 </div>
@@ -312,7 +316,11 @@ export default function MisconceptionMap({ history, onRestart }) {
                   <div className="flex items-center gap-2 flex-wrap">
                     <span
                       className="font-mono text-[10px] font-bold px-2 py-0.5 rounded"
-                      style={{ backgroundColor: `${cat.color}15`, color: cat.color, border: `1px solid ${cat.color}30` }}
+                      style={{
+                        backgroundColor: isSkipped ? '#f1f5f9' : `${cat.color}15`,
+                        color: isSkipped ? '#475569' : cat.color,
+                        border: `1px solid ${isSkipped ? '#cbd5e1' : `${cat.color}30`}`
+                      }}
                     >
                       {cat.label}
                     </span>
@@ -322,8 +330,10 @@ export default function MisconceptionMap({ history, onRestart }) {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#555a6e] font-medium">{h.problem.title}</p>
-                  <p className="text-[11px] text-[#8b90a0] italic truncate">"{h.studentAnswer}"</p>
+                  <p className="text-xs text-[#555a6e] dark:text-[#94a3b8] font-medium">{h.problem.title}</p>
+                  <p className="text-[11px] text-[#8b90a0] italic truncate">
+                    {isSkipped ? '[Skipped by student]' : `"${h.studentAnswer}"`}
+                  </p>
                 </div>
               </div>
             );
