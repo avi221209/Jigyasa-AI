@@ -110,7 +110,7 @@ export default function QuestionCard({ round, totalRounds, problem, onSubmitAnsw
                   type="button"
                   onClick={onSkipProblem}
                   disabled={isLoading}
-                  className="px-3 py-1.5 rounded-lg border border-[#d8dae3] dark:border-[#2a3449] text-[#555a6e] dark:text-[#94a3b8] hover:bg-[#f0f1f5] dark:hover:bg-[#2a3449] text-xs font-mono transition-colors cursor-pointer disabled:opacity-40"
+                  className="px-3 py-1.5 rounded-lg border border-[#d8dae3] text-[#555a6e] hover:bg-[#f0f1f5] text-xs font-mono transition-colors cursor-pointer disabled:opacity-40"
                 >
                   Skip this problem →
                 </button>

@@ -151,13 +151,13 @@ export default function MisconceptionMap({ history, onRestart }) {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="bg-white dark:bg-[#151c2c] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] shadow-sm px-5 py-4">
+      <div className="bg-white rounded-xl border border-[#d8dae3] shadow-sm px-5 py-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="font-display font-bold text-lg text-[#1c1f2b] dark:text-[#f1f5f9]">
+            <h2 className="font-display font-bold text-lg text-[#1c1f2b]">
               Misconception Map
             </h2>
-            <p className="text-xs text-[#8b90a0] dark:text-[#94a3b8] mt-0.5">
+            <p className="text-xs text-[#8b90a0] mt-0.5">
               3-round diagnostic profile — the kind of self-assessment that separates exam prep from actual understanding.
             </p>
           </div>
@@ -306,9 +306,9 @@ export default function MisconceptionMap({ history, onRestart }) {
               : categories[h.analysis?.category] || { label: h.analysis?.category, color: '#8b90a0' };
 
             return (
-              <div key={idx} className="flex gap-3 items-start p-3 rounded-lg border border-[#e8e9ef] dark:border-[#2a3449] bg-[#f6f7f9] dark:bg-[#0b0f19]">
+              <div key={idx} className="flex gap-3 items-start p-3 rounded-lg border border-[#e8e9ef] bg-[#f6f7f9]">
                 <div className="shrink-0">
-                  <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#1c1f2b] dark:bg-[#2a3449] text-white">
+                  <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#1c1f2b] text-white">
                     R{h.round}
                   </span>
                 </div>
@@ -330,7 +330,7 @@ export default function MisconceptionMap({ history, onRestart }) {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-[#555a6e] dark:text-[#94a3b8] font-medium">{h.problem.title}</p>
+                  <p className="text-xs text-[#555a6e] font-medium">{h.problem.title}</p>
                   <p className="text-[11px] text-[#8b90a0] italic truncate">
                     {isSkipped ? '[Skipped by student]' : `"${h.studentAnswer}"`}
                   </p>

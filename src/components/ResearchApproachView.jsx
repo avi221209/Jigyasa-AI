@@ -4,7 +4,7 @@ import React from 'react';
  * ResearchApproachView — Pedagogy & Research Foundation Reference Page
  *
  * Outlines the pedagogical rationale, theoretical background, five core research citations,
- * and future roadmap for Jigyasa AI.
+ * and future roadmap for Jigyasa AI in a clean, consistent light theme.
  */
 export default function ResearchApproachView({ onStartPractice, onStartAsk }) {
   const citations = [
@@ -53,50 +53,50 @@ export default function ResearchApproachView({ onStartPractice, onStartAsk }) {
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="bg-white dark:bg-[#151c2c] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] shadow-sm p-5 space-y-2 transition-colors">
+      <div className="bg-white rounded-xl border border-[#d8dae3] shadow-sm p-5 space-y-2">
         <div className="flex items-center gap-2">
           <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-[#059669] text-white">
             Pedagogy & Foundations
           </span>
-          <span className="font-mono text-[10px] text-[#8b90a0] dark:text-[#64748b]">
+          <span className="font-mono text-[10px] text-[#8b90a0]">
             Reference Guide
           </span>
         </div>
-        <h1 className="font-display font-bold text-xl text-[#1c1f2b] dark:text-[#f1f5f9]">
+        <h1 className="font-display font-bold text-xl text-[#1c1f2b]">
           Research & Pedagogical Approach
         </h1>
-        <p className="text-xs text-[#555a6e] dark:text-[#94a3b8] leading-relaxed">
+        <p className="text-xs text-[#555a6e] leading-relaxed">
           The learning design behind Jigyasa AI — why we focus on mental model diagnosis over syntax checking, and how computing education research shapes every component.
         </p>
       </div>
 
       {/* 1. What is Jigyasa AI */}
-      <section className="bg-white dark:bg-[#151c2c] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] shadow-sm p-5 space-y-2 transition-colors">
-        <h2 className="font-display font-semibold text-sm text-[#1c1f2b] dark:text-[#f1f5f9] flex items-center gap-2">
+      <section className="bg-white rounded-xl border border-[#d8dae3] shadow-sm p-5 space-y-2">
+        <h2 className="font-display font-semibold text-sm text-[#1c1f2b] flex items-center gap-2">
           <span>🧠</span> What is Jigyasa AI?
         </h2>
-        <p className="text-[13px] text-[#555a6e] dark:text-[#94a3b8] leading-relaxed">
+        <p className="text-[13px] text-[#555a6e] leading-relaxed">
           Jigyasa AI is an adaptive CS pedagogy diagnostic engine designed to help novice programmers master recursion and call-stack mechanics. Rather than simply evaluating code output for binary correctness, Jigyasa AI diagnoses the underlying mental model and reasoning behind a student's answer. When a conceptual gap is detected, the tutor automatically adapts its targeted remediation, stack visualizer, and problem progression to address that specific misconception.
         </p>
       </section>
 
       {/* 2. The Problem */}
-      <section className="bg-white dark:bg-[#151c2c] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] shadow-sm p-5 space-y-2 transition-colors">
-        <h2 className="font-display font-semibold text-sm text-[#1c1f2b] dark:text-[#f1f5f9] flex items-center gap-2">
+      <section className="bg-white rounded-xl border border-[#d8dae3] shadow-sm p-5 space-y-2">
+        <h2 className="font-display font-semibold text-sm text-[#1c1f2b] flex items-center gap-2">
           <span>⚠️</span> The Problem in Computing Education
         </h2>
-        <p className="text-[13px] text-[#555a6e] dark:text-[#94a3b8] leading-relaxed">
+        <p className="text-[13px] text-[#555a6e] leading-relaxed">
           Recursion is widely recognized as one of the hardest concepts to teach in introductory computer science. Novice programmers frequently display inconsistent mental models, performing accurately on simple linear problems while failing when given branching or accumulator-based problems. Because surface-level correct answers can mask deep conceptual gaps, a single static explanation or isolated practice problem fails to reveal or resolve a student's true learning barrier.
         </p>
       </section>
 
       {/* 3. Grounded in Research */}
-      <section className="bg-white dark:bg-[#151c2c] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] shadow-sm p-5 space-y-4 transition-colors">
+      <section className="bg-white rounded-xl border border-[#d8dae3] shadow-sm p-5 space-y-4">
         <div>
-          <h2 className="font-display font-semibold text-sm text-[#1c1f2b] dark:text-[#f1f5f9] flex items-center gap-2 mb-1">
+          <h2 className="font-display font-semibold text-sm text-[#1c1f2b] flex items-center gap-2 mb-1">
             <span>📚</span> Grounded in Computing Education Research
           </h2>
-          <p className="text-xs text-[#555a6e] dark:text-[#94a3b8]">
+          <p className="text-xs text-[#555a6e]">
             Each architectural component in Jigyasa AI directly maps to findings from peer-reviewed CS education literature:
           </p>
         </div>
@@ -105,28 +105,28 @@ export default function ResearchApproachView({ onStartPractice, onStartAsk }) {
           {citations.map((item, idx) => (
             <div
               key={item.id}
-              className="p-3.5 rounded-lg border border-[#e8e9ef] dark:border-[#2a3449] bg-[#f6f7f9] dark:bg-[#0b0f19] space-y-1.5 text-xs"
+              className="p-3.5 rounded-lg border border-[#e8e9ef] bg-[#f6f7f9] space-y-1.5 text-xs"
             >
               <div className="flex flex-wrap items-center justify-between gap-1">
                 <span className="font-mono text-[10px] font-bold text-[#059669]">
                   [{idx + 1}] {item.authors}
                 </span>
-                <span className="font-mono text-[10px] text-[#8b90a0] dark:text-[#64748b]">
+                <span className="font-mono text-[10px] text-[#8b90a0]">
                   {item.venue}
                 </span>
               </div>
-              <h3 className="font-display font-semibold text-[#1c1f2b] dark:text-[#f1f5f9] text-[13px]">
+              <h3 className="font-display font-semibold text-[#1c1f2b] text-[13px]">
                 "{item.title}"
               </h3>
-              <p className="text-[12px] text-[#555a6e] dark:text-[#94a3b8] leading-relaxed">
-                <strong className="text-[#3b5bdb] dark:text-[#60a5fa]">Feature Connection:</strong> {item.connection}
+              <p className="text-[12px] text-[#555a6e] leading-relaxed">
+                <strong className="text-[#3b5bdb]">Feature Connection:</strong> {item.connection}
               </p>
               <div className="pt-1">
                 <a
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-mono text-[11px] text-[#3b5bdb] dark:text-[#60a5fa] hover:underline"
+                  className="inline-flex items-center gap-1 font-mono text-[11px] text-[#3b5bdb] hover:underline"
                 >
                   🔗 Read Original Paper ↗
                 </a>
@@ -137,11 +137,11 @@ export default function ResearchApproachView({ onStartPractice, onStartAsk }) {
       </section>
 
       {/* 4. What's Next */}
-      <section className="bg-white dark:bg-[#151c2c] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] shadow-sm p-5 space-y-3 transition-colors">
-        <h2 className="font-display font-semibold text-sm text-[#1c1f2b] dark:text-[#f1f5f9] flex items-center gap-2">
+      <section className="bg-white rounded-xl border border-[#d8dae3] shadow-sm p-5 space-y-3">
+        <h2 className="font-display font-semibold text-sm text-[#1c1f2b] flex items-center gap-2">
           <span>🚀</span> What's Next (Future Roadmap)
         </h2>
-        <ul className="space-y-2 text-[12px] text-[#555a6e] dark:text-[#94a3b8] leading-relaxed font-mono">
+        <ul className="space-y-2 text-[12px] text-[#555a6e] leading-relaxed font-mono">
           <li className="flex items-start gap-2">
             <span className="text-[#059669] font-bold">✓</span>
             <span><strong>Extended Subject Coverage:</strong> Extending Jigyasa AI's subject-agnostic diagnostic architecture to additional DSA domains including Tree Traversals (DFS/BFS), Graph Algorithms, and Dynamic Programming.</span>
@@ -158,19 +158,19 @@ export default function ResearchApproachView({ onStartPractice, onStartAsk }) {
       </section>
 
       {/* Academic References Section */}
-      <section className="bg-[#f0f1f5] dark:bg-[#0b0f19] rounded-xl border border-[#d8dae3] dark:border-[#2a3449] p-5 space-y-3 transition-colors">
-        <h2 className="font-display font-semibold text-xs text-[#1c1f2b] dark:text-[#f1f5f9] uppercase tracking-wider">
+      <section className="bg-[#f0f1f5] rounded-xl border border-[#d8dae3] p-5 space-y-3">
+        <h2 className="font-display font-semibold text-xs text-[#1c1f2b] uppercase tracking-wider">
           Academic References
         </h2>
-        <ol className="space-y-2.5 font-mono text-[11px] text-[#555a6e] dark:text-[#94a3b8]">
+        <ol className="space-y-2.5 font-mono text-[11px] text-[#555a6e]">
           {citations.map((item, idx) => (
-            <li key={item.id} className="leading-relaxed border-b border-[#e8e9ef] dark:border-[#2a3449] pb-2 last:border-0 last:pb-0">
+            <li key={item.id} className="leading-relaxed border-b border-[#e8e9ef] pb-2 last:border-0 last:pb-0">
               [{idx + 1}] {item.authors}. ({item.title}). <em>{item.venue}</em>.{' '}
               <a
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#3b5bdb] dark:text-[#60a5fa] hover:underline break-all"
+                className="text-[#3b5bdb] hover:underline break-all"
               >
                 {item.url}
               </a>
