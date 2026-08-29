@@ -18,15 +18,17 @@ Open [http://localhost:5173](http://localhost:5173).
 
 ## 🎯 Application Modes
 
-Jigyasa AI offers two complementary learning entry points:
+Jigyasa AI offers three complementary learning & research entry points:
 
 ### 1. 📘 Practice Mode (System-Guided Adaptive Flow)
-- **3 Adaptive Diagnostic Rounds**: Works through system-generated recursion problems (`factorial(3)`, `reverseString("cat")`, `power(2,3)`).
+- **3 Adaptive Diagnostic Rounds**: Works through system-generated recursion problems (`factorial(3)`, `reverseString("cat")`, `power(2,3)`, tail recursion, mutual recursion, memoization).
 - **Interactive Call Stack Visualizer**: Predict upcoming frame operations (**PUSH ↓** vs **POP ↑**) and observe LIFO unwinding.
-- **Misconception Map**: View Bar & Radar charts, cross-round persistence tracking (*Resolved*, *Persistent*, *New*), and confidence calibration metrics.
+- **Explain It Back Challenge**: Feynman technique prompts encouraging students to explain concepts in their own words.
+- **Misconception Map**: View Bar & Radar charts, Prerequisite Hierarchy Map, cross-round persistence tracking (*Resolved*, *Persistent*, *New*), and confidence calibration metrics.
 
 ### 2. ❓ Ask Mode — Diagnose My Understanding (User-Submitted Question Mode)
 - **Custom Question & Reasoning**: Paste any CS/DSA code snippet, question, or concept you're confused about, along with what you think is happening.
+- **Off-Topic Detection**: Automatically detects non-recursion/DSA questions and gently redirects without forcing a misconception category.
 - **7-Part Diagnostic Breakdown**:
   - **Section A**: Diagnostic Category Badge & Concept Tag Pills (`#recursion`, `#call stack`, `#base case`).
   - **Section B**: `✅ What You Got Right` (highlights precise accurate parts of your reasoning).
@@ -36,7 +38,9 @@ Jigyasa AI offers two complementary learning entry points:
   - **Section F**: `🔁 Prove You've Got It` (interactive mini-round challenge with immediate verdict feedback).
   - **Section G**: Quick Action Buttons (`↺ Ask Another Question` & `Switch to Practice Mode →`).
 
----
+### 3. 📚 Research & Approach (Pedagogical Rationale & Citations)
+- **4 Structured Core Sections**: "What is Jigyasa AI", "The Problem", "Grounded in Research", "What's Next".
+- **5 Academic Citations**: Peer-reviewed CS education papers from ITiCSE, AERA, ICER 2025, Metacognition & Learning, and University of Tennessee / NSF.
 
 ## 🧠 Misconception Classification Concept
 

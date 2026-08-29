@@ -5,6 +5,7 @@ import FeedbackCard from './components/FeedbackCard';
 import MisconceptionMap from './components/MisconceptionMap';
 import AskModeFlow from './components/AskMode/AskModeFlow';
 import ProviderBadge from './components/ProviderBadge';
+import ResearchApproachView from './components/ResearchApproachView';
 
 // Subject data — recursion content
 import {
@@ -64,6 +65,10 @@ export default function App() {
 
   const handleSelectAskMode = () => {
     setAppMode('ask');
+  };
+
+  const handleSelectResearchMode = () => {
+    setAppMode('research');
   };
 
   const handleSelectHome = () => {
@@ -255,6 +260,16 @@ export default function App() {
               >
                 Ask Mode
               </button>
+              <button
+                onClick={handleSelectResearchMode}
+                className={`px-2.5 py-1 rounded-md font-mono text-[11px] font-medium transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#3b5bdb] ${
+                  appMode === 'research'
+                    ? 'bg-[#059669] text-white shadow-sm font-semibold'
+                    : 'text-[#555a6e] dark:text-[#94a3b8] hover:text-[#1c1f2b]'
+                }`}
+              >
+                Research & Approach
+              </button>
             </div>
 
             {/* Theme & Accessibility Controls */}
@@ -326,6 +341,13 @@ export default function App() {
           <AskModeFlow
             onSwitchToPracticeMode={handleSelectPracticeMode}
             onUpdateFallbackInfo={handleUpdateFallbackInfo}
+          />
+        )}
+
+        {appMode === 'research' && (
+          <ResearchApproachView
+            onStartPractice={handleSelectPracticeMode}
+            onStartAsk={handleSelectAskMode}
           />
         )}
 

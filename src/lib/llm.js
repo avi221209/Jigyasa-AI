@@ -144,7 +144,7 @@ async function callNvidia(prompt, systemInstruction, apiKey, modelName) {
  * Call Google Gemini API
  */
 async function callGemini(prompt, systemInstruction, apiKey) {
-  const models = ['gemini-3.6-flash', 'gemini-3.5-flash-lite'];
+  const models = ['gemini-3.5-flash-lite', 'gemini-3.6-flash'];
   let lastError = null;
 
   for (const model of models) {
